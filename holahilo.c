@@ -1,14 +1,19 @@
 #include <pthread.h>
 #include <stdio.h>
 
-#define NUM_THREADS 5
+#define NUM_THREADS 50
 int saldo;
 
+pthread_mutex_t lockSaldo = PTHREAD_MUTEX_INITIALIZER;
+
 void *printHola(void *arg){
-    printf("Hola desde un hilo\n");
-    int saldolocal = saldo;
+    //printf("Hola desde un hilo\n");
+    int saldolocal;
+    pthread_mutex_lock(&lockSaldo);
+    saldolocal = saldo;
     saldolocal += 100; //Normalmente seróa un cálculo complejo
     saldo = saldolocal;
+    pthread_mutex_unlock(&lockSaldo);
     pthread_exit(NULL);
 }
 
